@@ -1,0 +1,88 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+
+double result;
+
+struct po {
+	double x, y, z;
+}p[10];
+
+const double pi = 3.1415926535;
+
+double minn(double a, double b) {
+	if (a < b) {
+		return a;
+	}
+	else {
+		return b;
+	}
+}
+
+double dist(int i) {
+	double m = 1000;
+	double mi[6];
+	mi[0] = fabs(p[i].x - 2);
+	mi[1] = fabs(p[i].y - 0);
+	mi[2] = fabs(p[i].z - 0);
+	mi[3] = fabs(p[i].x - 0);
+	mi[4] = fabs(p[i].y - 2);
+	mi[5] = fabs(p[i].z - 2);
+	for (int j = 0; j < 6; j++) {
+		if (mi[j] < m) {
+			m = mi[j];
+		}
+	}
+	if (i != 0) {
+		for (int j = 0; j < i; j++) {
+			m = minn(m, sqrt((p[i].x - p[j].x)*(p[i].x - p[j].x) + (p[i].y - p[j].y)*(p[i].y - p[j].y) + (p[i].z - p[j].z)*(p[i].z - p[j].z)) - dist(j));
+		}
+	}
+	if (m <= 0) {
+		m = 0;
+		return m;
+	}
+	else {		
+		return m;
+	}
+}
+
+int main() {
+	double result = 0;
+	double fx;
+	double x[10], y[10], z[10];
+
+	for (x[1] = 0; x[1] <= 2; x[1] += 0.01) {
+		for (y[1] = 0; y[1] <= 2; y[1] += 0.01) {
+			for (z[1] = 0; z[1] <= 2; z[1] += 0.01) {
+				for (x[0] = 0; x[0] <= 1; x[0] += 0.01) {
+					for (y[0] = 0; y[0] <= 1; y[0] += 0.01) {
+						for (z[0] = 0; z[0] <= 1; z[0] += 0.01) {
+							for (int i = 0; i <= 1; i++) {
+								p[i].x = x[i];
+								p[i].y = y[i];
+								p[i].z = z[i];
+							}					
+							printf("%f %f %f %f %f %f", x[0], y[0], y[0], x[1], y[1], z[1]);
+							fx = result;
+							result = 0;
+							for (int i = 0; i <= 1; i++) {
+								result = result + dist(i)*dist(i);
+							}
+							if (result < fx) {
+								result = fx;
+							}	
+							printf(" result=%f\n", result);
+						}
+					}
+				}			
+			}
+		}
+	}
+	
+	printf("%f\n", result);
+
+	system("pause");
+	return 0;
+}
