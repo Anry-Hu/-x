@@ -1,0 +1,119 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+
+//本实验盒子的坐标为：左底角（0，0），右顶角（2，2）
+double result;
+
+struct po {
+	double x, y, z;
+}p[10];//气球的结构体
+
+const double pi = 3.1415926535;
+
+double minn(double a, double b) {
+	if (a < b) {
+		return a;
+	}
+	else {
+		return b;
+	}
+}//类似min效果
+
+//表示气球的半径
+double dist(int i) {
+	double m = 1000;
+	double mi[4];
+	mi[0] = fabs(p[i].x - 0);
+	mi[1] = fabs(p[i].y - 0);
+	mi[2] = fabs(p[i].x - 2);
+	mi[3] = fabs(p[i].y - 2);
+	for (int j = 0; j < 4; j++) {
+		if (mi[j] < m) {
+			m = mi[j];
+		}
+	}//球心与边界的最小距离，利用左底角和右顶角求出
+
+	if (i != 0) {
+		for (int j = 0; j < i; j++) {
+			m = minn(m, sqrt((p[i].x - p[j].x)*(p[i].x - p[j].x) + (p[i].y - p[j].y)*(p[i].y - p[j].y)) - dist(j));
+		}
+	}
+	if (m <= 0) {
+		m = 0;
+		return m;
+	}//球心与其它球心的距离，并减去其它球心的半径，得到此球心的半径。注：球心重叠时，使其中一个球的半径为0
+	else {		
+		return m;
+	}
+}
+
+int main() {
+	double result = 0;
+	double fx;
+	double x[10], y[10];
+
+	//循环进行空间遍历
+	for (x[1] = 0; x[1] <= 2.00000000001; x[1] += 0.001) {
+		for (y[1] = 0; y[1] <= 2; y[1] += 0.001) {
+			for (x[0] = 0; x[0] <= 2; x[0] += 0.001) {
+				for (y[0] = 0; y[0] <= 2; y[0] += 0.001) {
+					for (int i = 0; i <= 1; i++) {
+						p[i].x = x[i];
+						p[i].y = y[i];
+					}										
+					fx = result;
+					result = 0;
+					for (int i = 0; i <= 1; i++) {
+						result = result + dist(i)*dist(i);
+					}
+					if (result < fx) {
+						result = fx;
+					}							
+				}
+			}					
+		}
+	}
+	printf("result=%f\n", result);
+
+	double result_2 = 0;
+	
+	//找出坐标
+	for (x[1] = 0; x[1] <= 2.00000000001; x[1] += 0.001) {
+		for (y[1] = 0; y[1] <= 2; y[1] += 0.001) {
+			for (x[0] = 0; x[0] <= 2; x[0] += 0.001) {
+				for (y[0] = 0; y[0] <= 2; y[0] += 0.001) {
+					for (int i = 0; i <= 1; i++) {
+						p[i].x = x[i];
+						p[i].y = y[i];
+					}
+					fx = result_2;
+					result_2 = 0;
+					for (int i = 0; i <= 1; i++) {
+						result_2 = result_2 + dist(i)*dist(i);
+					}
+					if (result < fx) {
+						result = fx;
+					}
+					if (result_2 == result) {
+						printf("x1=%f y1=%f x2=%f y2=%f\n", x[0], y[0], x[1], y[1]);
+						break;
+					}
+				}
+				if (result_2 == result) {
+					break;
+				}
+			}
+			if (result_2 == result) {
+				break;
+			}
+	    }
+		if (result_2 == result) {
+			break;
+		}
+    }	
+	
+	system("pause");
+	return 0;
+}
