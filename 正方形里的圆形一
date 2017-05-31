@@ -97,7 +97,7 @@ int main() {
 						result = fx;
 					}
 					if (result_2 == result) {
-						printf("x1=%f y1=%f x2=%f y2=%f\n", x[0], y[0], x[1], y[1]);
+				                printf("x1=%f y1=%f r1=%f\nx2=%f y2=%f r2=%f\n", x[0], y[0], dist(0), x[1], y[1], dist(1));
 						break;
 					}
 				}
