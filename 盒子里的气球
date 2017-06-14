@@ -7,7 +7,7 @@ double result;
 
 struct po {
 	double x, y, z;
-}p[10];
+}p[10];//气球的结构体
 
 const double pi = 3.1415926535;
 
@@ -18,8 +18,9 @@ double minn(double a, double b) {
 	else {
 		return b;
 	}
-}
+}//类似min效果
 
+ //表示气球的半径
 double dist(int i) {
 	double m = 1000;
 	double mi[6];
@@ -33,7 +34,7 @@ double dist(int i) {
 		if (mi[j] < m) {
 			m = mi[j];
 		}
-	}
+	}//球心与边界的最小距离，利用左底角和右顶角求出
 	if (i != 0) {
 		for (int j = 0; j < i; j++) {
 			m = minn(m, sqrt((p[i].x - p[j].x)*(p[i].x - p[j].x) + (p[i].y - p[j].y)*(p[i].y - p[j].y) + (p[i].z - p[j].z)*(p[i].z - p[j].z)) - dist(j));
@@ -42,29 +43,30 @@ double dist(int i) {
 	if (m <= 0) {
 		m = 0;
 		return m;
-	}
-	else {		
+	}//球心与其它球心的距离，并减去其它球心的半径，得到此球心的半径。注：球心重叠时，使其中一个球的半径为0
+	else {
 		return m;
 	}
 }
 
 int main() {
 	double result = 0;
+	double result_2 = 0;
 	double fx;
 	double x[10], y[10], z[10];
 
+	//循环进行空间遍历
 	for (x[1] = 0; x[1] <= 2; x[1] += 0.01) {
 		for (y[1] = 0; y[1] <= 2; y[1] += 0.01) {
 			for (z[1] = 0; z[1] <= 2; z[1] += 0.01) {
-				for (x[0] = 0; x[0] <= 1; x[0] += 0.01) {
-					for (y[0] = 0; y[0] <= 1; y[0] += 0.01) {
-						for (z[0] = 0; z[0] <= 1; z[0] += 0.01) {
+				for (x[0] = 0; x[0] <= 2; x[0] += 0.01) {
+					for (y[0] = 0; y[0] <= 2; y[0] += 0.01) {
+						for (z[0] = 0; z[0] <= 2; z[0] += 0.01) {
 							for (int i = 0; i <= 1; i++) {
 								p[i].x = x[i];
 								p[i].y = y[i];
 								p[i].z = z[i];
-							}					
-							printf("%f %f %f %f %f %f", x[0], y[0], y[0], x[1], y[1], z[1]);
+							}						
 							fx = result;
 							result = 0;
 							for (int i = 0; i <= 1; i++) {
@@ -72,16 +74,60 @@ int main() {
 							}
 							if (result < fx) {
 								result = fx;
-							}	
-							printf(" result=%f\n", result);
+							}							
 						}
 					}
-				}			
+				}
 			}
 		}
 	}
-	
-	printf("%f\n", result);
+
+	//利用最大值，循环遍历求出坐标
+	for (x[1] = 0; x[1] <= 2; x[1] += 0.01) {
+		for (y[1] = 0; y[1] <= 2; y[1] += 0.01) {
+			for (z[1] = 0; z[1] <= 2; z[1] += 0.01) {
+				for (x[0] = 0; x[0] <= 2; x[0] += 0.01) {
+					for (y[0] = 0; y[0] <= 2; y[0] += 0.01) {
+						for (z[0] = 0; z[0] <= 2; z[0] += 0.01) {
+							for (int i = 0; i <= 1; i++) {
+								p[i].x = x[i];
+								p[i].y = y[i];
+								p[i].z = z[i];
+							}
+							fx = result_2;
+							result_2 = 0;
+							for (int i = 0; i <= 1; i++) {
+								result_2 = result_2 + dist(i)*dist(i);
+							}
+							if (result_2 < fx) {
+								result_2 = fx;
+							}
+							if (result_2 == result) {
+								printf("x1=%f y1=%f z1=%f r1=%f\nx2=%f y2=%f z2=%f r2=%f\n", x[0], y[0], z[0], dist(0), x[1], y[1], z[1], dist(1));
+								break;
+							}
+						}
+						if (result_2 == result) {
+							break;
+						}
+					}
+					if (result_2 == result) {
+						break;
+					}
+				}
+				if (result_2 == result) {
+					break;
+				}
+			}
+			if (result_2 == result) {
+				break;
+			}
+		}
+		if (result_2 == result) {
+			break;
+		}
+	}
+	printf("最小半径和=%f\n", result);
 
 	system("pause");
 	return 0;
